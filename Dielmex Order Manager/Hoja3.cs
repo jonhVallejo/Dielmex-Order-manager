@@ -20,8 +20,13 @@ namespace Dielmex_Order_Manager
         private Dictionary<int, ComboBox> comboBoxes;
         private Dictionary<int, Tuple<Button, int>> buttons;
 
-        
+        enum ActionForButtonNew
+        {
+            NEW,
+            CANCEL
+        };
 
+        private ActionForButtonNew _actionButton = ActionForButtonNew.NEW;
 
         private int _offsetForComboxInTable;
         private int _firstIndexForTable;
@@ -31,9 +36,14 @@ namespace Dielmex_Order_Manager
             cbEquipo.DisplayMember = "Dielmex_Order_Manager.com.models.Inventario.NEconomico";
             cbEquipo.ValueMember = "NEconomico";
             cbEquipo.DataSource = Hoja2._inventary;
+            cbEquipo.Visible = false;
+
+            
 
             cbOrdenNumber.DataSource = Hoja6._ordenes;
             cbOrdenNumber.DisplayMember = "Folio";
+
+            cbOrdenNumber.SelectedValueChanged += cbOrdenNumber_SelectedValueChanged;
 
             cbEquipo.SelectedValueChanged += cbEquipo_SelectedValueChanged;
 
@@ -45,6 +55,33 @@ namespace Dielmex_Order_Manager
 
             _offsetForComboxInTable += 2;
             _firstIndexForTable = 19;
+        }
+
+        void cbOrdenNumber_SelectedValueChanged(object sender, EventArgs e)
+        {
+            btGuardar.Enabled = true;
+            btNuevo.Enabled = false; 
+            cbEquipo.Visible = true;
+            cbEquipo.Enabled = true;
+
+            _actionButton = ActionForButtonNew.CANCEL;
+            btNuevo.Text = "Cancelar";
+            btNuevo.Enabled = true;
+
+            Orden tempOrden;
+            tempOrden = (Orden)cbOrdenNumber.SelectedItem;
+
+            cbEquipo.SelectedIndex = Hoja2._inventary.FindIndex(el => { return el.NEconomico == tempOrden.Equipo.NEconomico; });
+
+            cbOrdenNumber.Enabled = false;
+            cbOrdenNumber.Visible = false;
+
+            Globals.Hoja3.Range["b12"].Value = tempOrden.CentroTrabajo;
+            Globals.Hoja3.Range["b13"].Value = tempOrden.Delegacion;
+            Globals.Hoja3.Range["f5"].Value = tempOrden.FechaServicio;
+            Globals.Hoja3.Range["f7"].Value = tempOrden.Folio;
+            Globals.Hoja3.Range["f9"].Value = tempOrden.Tecnico;
+            Globals.Hoja3.Range["f11"].Value = tempOrden.Recibio;
         }
 
         void cbEquipo_SelectedValueChanged(object sender, EventArgs e)
@@ -69,8 +106,8 @@ namespace Dielmex_Order_Manager
         private void InternalStartup()
         {
             this.btAdd.Click += new System.EventHandler(this.btAdd_Click);
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.btNuevo.Click += new System.EventHandler(this.button1_Click);
+            this.btGuardar.Click += new System.EventHandler(this.button2_Click);
             this.Startup += new System.EventHandler(this.Hoja3_Startup);
             this.Shutdown += new System.EventHandler(this.Hoja3_Shutdown);
 
@@ -149,7 +186,44 @@ namespace Dielmex_Order_Manager
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //Habilitar campos y sacar el ultimo folio
+            switch (_actionButton)
+            {
+                case ActionForButtonNew.NEW:
+                    //Habilitar campos y sacar el ultimo folio
+                    btNuevo.Text = "Cancelar";
+                    _actionButton = ActionForButtonNew.CANCEL;
+                    btGuardar.Enabled = true;
+                    btAdd.Enabled = true;
+                    cbEquipo.Visible = true;
+                    cbEquipo.Enabled = true;
+                    break;
+                case ActionForButtonNew.CANCEL:
+                    _actionButton = ActionForButtonNew.NEW;
+                    btNuevo.Text = "Nuevo";
+                    btGuardar.Enabled = false;
+                    btAdd.Enabled = false;
+                    cbEquipo.Visible = false;
+                    cbEquipo.Enabled = false;
+                    cbOrdenNumber.Enabled = true;
+                    cbOrdenNumber.Visible = true;
+                    clear();
+                    break;
+            }
+            
+        }
+
+        private void clear()
+        {
+            Globals.Hoja3.Cells[9, 2].value = "";
+            Globals.Hoja3.Cells[10, 2].value = "";
+            Globals.Hoja3.Cells[11, 2].value = "";
+
+            Globals.Hoja3.Range["b12"].Value = "";
+            Globals.Hoja3.Range["b13"].Value = "";
+            Globals.Hoja3.Range["f5"].Value = "";
+            Globals.Hoja3.Range["f7"].Value = "";
+            Globals.Hoja3.Range["f9"].Value = "";
+            Globals.Hoja3.Range["f11"].Value = "";
         }
 
         private void button2_Click(object sender, EventArgs e)

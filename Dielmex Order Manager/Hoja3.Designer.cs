@@ -24,9 +24,9 @@ namespace Dielmex_Order_Manager {
         
         internal Microsoft.Office.Tools.Excel.Controls.Button btAdd;
         
-        internal Microsoft.Office.Tools.Excel.Controls.Button button1;
+        internal Microsoft.Office.Tools.Excel.Controls.Button btNuevo;
         
-        internal Microsoft.Office.Tools.Excel.Controls.Button button2;
+        internal Microsoft.Office.Tools.Excel.Controls.Button btGuardar;
         
         internal Microsoft.Office.Tools.Excel.Controls.ComboBox cbOrdenNumber;
         
@@ -141,8 +141,8 @@ namespace Dielmex_Order_Manager {
         private void InitializeControls() {
             this.cbEquipo = new Microsoft.Office.Tools.Excel.Controls.ComboBox(Globals.Factory, this.ItemProvider, this.HostContext, "1487594CF1FC2C147F61B896146A81E4A150B1", "1487594CF1FC2C147F61B896146A81E4A150B1", this, "cbEquipo");
             this.btAdd = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "19EA1E6DA1E9D1146951A77C16F0B7E97DAC71", "19EA1E6DA1E9D1146951A77C16F0B7E97DAC71", this, "btAdd");
-            this.button1 = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "1D226FE241A057143F318EEE1DC41EEEEED3E1", "1D226FE241A057143F318EEE1DC41EEEEED3E1", this, "button1");
-            this.button2 = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "15E57E5F1128D3144B71B706123362B4519C21", "15E57E5F1128D3144B71B706123362B4519C21", this, "button2");
+            this.btNuevo = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "1D226FE241A057143F318EEE1DC41EEEEED3E1", "1D226FE241A057143F318EEE1DC41EEEEED3E1", this, "btNuevo");
+            this.btGuardar = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "15E57E5F1128D3144B71B706123362B4519C21", "15E57E5F1128D3144B71B706123362B4519C21", this, "btGuardar");
             this.cbOrdenNumber = new Microsoft.Office.Tools.Excel.Controls.ComboBox(Globals.Factory, this.ItemProvider, this.HostContext, "132A89A151759014AEB184F216556CD900D221", "132A89A151759014AEB184F216556CD900D221", this, "cbOrdenNumber");
         }
         
@@ -154,32 +154,35 @@ namespace Dielmex_Order_Manager {
             // 
             // cbEquipo
             // 
+            this.cbEquipo.Enabled = false;
             this.cbEquipo.Name = "cbEquipo";
             this.cbEquipo.Text = "Ej. 9823-232";
             // 
             // btAdd
             // 
             this.btAdd.BackColor = System.Drawing.SystemColors.Control;
+            this.btAdd.Enabled = false;
             this.btAdd.ForeColor = System.Drawing.SystemColors.ControlText;
             this.btAdd.Name = "btAdd";
             this.btAdd.Text = "Agregar";
             this.btAdd.UseVisualStyleBackColor = false;
             // 
-            // button1
+            // btNuevo
             // 
-            this.button1.BackColor = System.Drawing.SystemColors.Control;
-            this.button1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button1.Name = "button1";
-            this.button1.Text = "Nuevo";
-            this.button1.UseVisualStyleBackColor = false;
+            this.btNuevo.BackColor = System.Drawing.SystemColors.Control;
+            this.btNuevo.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btNuevo.Name = "btNuevo";
+            this.btNuevo.Text = "Nuevo";
+            this.btNuevo.UseVisualStyleBackColor = false;
             // 
-            // button2
+            // btGuardar
             // 
-            this.button2.BackColor = System.Drawing.SystemColors.Control;
-            this.button2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button2.Name = "button2";
-            this.button2.Text = "Guardar";
-            this.button2.UseVisualStyleBackColor = false;
+            this.btGuardar.BackColor = System.Drawing.SystemColors.Control;
+            this.btGuardar.Enabled = false;
+            this.btGuardar.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btGuardar.Name = "btGuardar";
+            this.btGuardar.Text = "Guardar";
+            this.btGuardar.UseVisualStyleBackColor = false;
             // 
             // cbOrdenNumber
             // 
@@ -190,8 +193,8 @@ namespace Dielmex_Order_Manager {
             // 
             this.cbEquipo.BindingContext = this.BindingContext;
             this.btAdd.BindingContext = this.BindingContext;
-            this.button1.BindingContext = this.BindingContext;
-            this.button2.BindingContext = this.BindingContext;
+            this.btNuevo.BindingContext = this.BindingContext;
+            this.btGuardar.BindingContext = this.BindingContext;
             this.cbOrdenNumber.BindingContext = this.BindingContext;
         }
         
