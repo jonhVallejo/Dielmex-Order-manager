@@ -57,7 +57,7 @@ namespace Dielmex_Order_Manager
                        }
                        select item).ToList();
             res = res.Select(c =>
-            {
+                {
                 c.Equipo = Hoja2._inventary.Where(
                     _inv =>
                         _inv.NEconomico == auxListForEquipo.Where(
@@ -71,13 +71,50 @@ namespace Dielmex_Order_Manager
                 return c;
             
             }).ToList();
+            if (res.Count == 1 && res.FirstOrDefault().Folio == 0)
+            {
+                _ordenes = new List<Orden>();
 
+            }else
+            {
             _ordenes = res;
+            }
             
         }
 
         private void Hoja6_Shutdown(object sender, System.EventArgs e)
         {
+        }
+
+        internal void save()
+        {
+            if (this.tbOrdenHeader.DataBodyRange != null)
+            {
+                this.tbOrdenHeader.DataBodyRange.Rows.Delete();
+            }
+//            int rowsCount = this.tbOrdenHeader.DataBodyRange.Rows.de;
+
+        //    for(int i = 0; i < rowsCount)
+
+            int count = 0;
+            Hoja7._conceptos.Clear();
+            foreach (Orden currentOrden in _ordenes)
+            {
+                Hoja7._conceptos.AddRange(currentOrden.Conceptos);
+                int offset = this.tbOrdenHeader.DataBodyRange.Rows.Row + count++;
+
+                Globals.Hoja6.Range["A" + offset].Value = currentOrden.Folio;
+                Globals.Hoja6.Range["B" + offset].Value = currentOrden.Equipo.NEconomico;
+                Globals.Hoja6.Range["C" + offset].Value = currentOrden.CentroTrabajo;
+                Globals.Hoja6.Range["D" + offset].Value = currentOrden.Delegacion;
+                Globals.Hoja6.Range["E" + offset].Value = currentOrden.FechaServicio;
+                Globals.Hoja6.Range["F" + offset].Value = currentOrden.Tecnico;
+                Globals.Hoja6.Range["G" + offset].Value = currentOrden.Recibio;
+
+                this.tbOrdenHeader.ListRows.AddEx(System.Type.Missing, true);
+            }
+
+            Globals.Hoja7.save();
         }
 
         #region Código generado por el Diseñador de VSTO

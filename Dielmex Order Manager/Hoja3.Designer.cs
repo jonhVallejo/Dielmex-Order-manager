@@ -17,6 +17,8 @@ namespace Dielmex_Order_Manager {
     [global::System.Security.Permissions.PermissionSetAttribute(global::System.Security.Permissions.SecurityAction.Demand, Name="FullTrust")]
     public sealed partial class Hoja3 : Microsoft.Office.Tools.Excel.WorksheetBase {
         
+        internal Microsoft.Office.Tools.Excel.ListObject tbBody;
+        
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "12.0.0.0")]
         private global::System.Object missing = global::System.Type.Missing;
         
@@ -124,6 +126,7 @@ namespace Dielmex_Order_Manager {
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         private void BeginInitialization() {
             this.BeginInit();
+            this.tbBody.BeginInit();
         }
         
         /// 
@@ -131,6 +134,7 @@ namespace Dielmex_Order_Manager {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "12.0.0.0")]
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         private void EndInitialization() {
+            this.tbBody.EndInit();
             this.EndInit();
         }
         
@@ -139,6 +143,7 @@ namespace Dielmex_Order_Manager {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "12.0.0.0")]
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         private void InitializeControls() {
+            this.tbBody = Globals.Factory.CreateListObject(null, null, "Hoja3:tbBody", "tbBody", this);
             this.cbEquipo = new Microsoft.Office.Tools.Excel.Controls.ComboBox(Globals.Factory, this.ItemProvider, this.HostContext, "1487594CF1FC2C147F61B896146A81E4A150B1", "1487594CF1FC2C147F61B896146A81E4A150B1", this, "cbEquipo");
             this.btAdd = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "19EA1E6DA1E9D1146951A77C16F0B7E97DAC71", "19EA1E6DA1E9D1146951A77C16F0B7E97DAC71", this, "btAdd");
             this.btNuevo = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "1D226FE241A057143F318EEE1DC41EEEEED3E1", "1D226FE241A057143F318EEE1DC41EEEEED3E1", this, "btNuevo");
@@ -189,6 +194,10 @@ namespace Dielmex_Order_Manager {
             this.cbOrdenNumber.Name = "cbOrdenNumber";
             this.cbOrdenNumber.Text = "comboBox1";
             // 
+            // tbBody
+            // 
+            this.tbBody.DefaultDataSourceUpdateMode = System.Windows.Forms.DataSourceUpdateMode.Never;
+            // 
             // Hoja3
             // 
             this.cbEquipo.BindingContext = this.BindingContext;
@@ -203,6 +212,15 @@ namespace Dielmex_Order_Manager {
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
         private bool NeedsFill(string MemberName) {
             return this.DataHost.NeedsFill(this, MemberName);
+        }
+        
+        /// 
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "12.0.0.0")]
+        [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
+        protected override void OnShutdown() {
+            this.tbBody.Dispose();
+            base.OnShutdown();
         }
     }
     

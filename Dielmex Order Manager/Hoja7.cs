@@ -46,11 +46,14 @@ namespace Dielmex_Order_Manager
                 ConceptoOrden temp;
                 temp = new ConceptoOrden();
                 temp.Orden = element.Item1;
+                if (element.Item2 != null)
+                {
+                    temp.Equipo = Hoja1._services.Where(currentService => currentService.Ref == element.Item2).FirstOrDefault();
+                    temp.Cantidad = element.Item3;
 
-                temp.Equipo = Hoja1._services.Where(currentService => currentService.Ref == element.Item2).FirstOrDefault();
-                temp.Cantidad = element.Item3;
-
-                temp.SubTotal = temp.Cantidad * temp.Equipo.Costo;
+                    temp.SubTotal = temp.Cantidad * temp.Equipo.Costo;
+                }
+               
                
 
 
@@ -62,6 +65,27 @@ namespace Dielmex_Order_Manager
 
             onLoaded();
 
+        }
+
+        internal void save()
+        {
+            if (this.tbOrdenBody.DataBodyRange != null)
+            {
+                this.tbOrdenBody.DataBodyRange.Rows.Delete();
+            }
+            int count = 0;
+
+            foreach (ConceptoOrden currentOrden in _conceptos)
+            {
+                int offset = this.tbOrdenBody.DataBodyRange.Rows.Row + count++;
+
+                this.Range["A" + offset].Value = currentOrden.Orden;
+                this.Range["B" + offset].Value = currentOrden.Equipo;
+                this.Range["C" + offset].Value = currentOrden.Equipo.Costo;
+                this.Range["D" + offset].Value = currentOrden.Cantidad;
+
+                this.tbOrdenBody.ListRows.AddEx(System.Type.Missing, true);
+            }
         }
 
         #region Código generado por el Diseñador de VSTO
