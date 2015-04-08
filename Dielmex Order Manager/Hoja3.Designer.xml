@@ -1129,7 +1129,7 @@
 <CodeObject_x002B_userData href="#ref-435"/>
 </a1:CodePropertyReferenceExpression>
 <a1:CodePrimitiveExpression id="ref-215" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/System.CodeDom/System%2C%20Version%3D4.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Db77a5c561934e089">
-<value id="ref-436" xsi:type="SOAP-ENC:string">comboBox1</value>
+<value id="ref-436" xsi:type="SOAP-ENC:string">Ej. 12</value>
 <CodeObject_x002B_userData href="#ref-437"/>
 </a1:CodePrimitiveExpression>
 <a1:CodeDirectiveCollection id="ref-216" xmlns:a1="http://schemas.microsoft.com/clr/nsassem/System.CodeDom/System%2C%20Version%3D4.0.0.0%2C%20Culture%3Dneutral%2C%20PublicKeyToken%3Db77a5c561934e089">

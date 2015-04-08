@@ -92,16 +92,12 @@ namespace Dielmex_Order_Manager
             {
                 this.tbOrdenHeader.DataBodyRange.Rows.Delete();
             }
-//            int rowsCount = this.tbOrdenHeader.DataBodyRange.Rows.de;
-
-        //    for(int i = 0; i < rowsCount)
 
             int count = 0;
-            Hoja7._conceptos.Clear();
             foreach (Orden currentOrden in _ordenes)
             {
-                Hoja7._conceptos.AddRange(currentOrden.Conceptos);
-                int offset = this.tbOrdenHeader.DataBodyRange.Rows.Row + count++;
+                
+                int offset = (this.tbOrdenHeader.DataBodyRange == null) ? this.tbOrdenHeader.HeaderRowRange.Row + ++count : this.tbOrdenHeader.DataBodyRange.Rows.Row + count++;
 
                 Globals.Hoja6.Range["A" + offset].Value = currentOrden.Folio;
                 Globals.Hoja6.Range["B" + offset].Value = currentOrden.Equipo.NEconomico;
@@ -114,7 +110,6 @@ namespace Dielmex_Order_Manager
                 this.tbOrdenHeader.ListRows.AddEx(System.Type.Missing, true);
             }
 
-            Globals.Hoja7.save();
         }
 
         #region Código generado por el Diseñador de VSTO

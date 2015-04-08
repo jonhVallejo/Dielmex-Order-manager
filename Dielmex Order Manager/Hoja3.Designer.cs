@@ -192,7 +192,7 @@ namespace Dielmex_Order_Manager {
             // cbOrdenNumber
             // 
             this.cbOrdenNumber.Name = "cbOrdenNumber";
-            this.cbOrdenNumber.Text = "comboBox1";
+            this.cbOrdenNumber.Text = "Ej. 12";
             // 
             // tbBody
             // 

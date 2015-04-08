@@ -77,14 +77,17 @@ namespace Dielmex_Order_Manager
 
             foreach (ConceptoOrden currentOrden in _conceptos)
             {
-                int offset = this.tbOrdenBody.DataBodyRange.Rows.Row + count++;
+                if (currentOrden.Equipo != null)
+                {
+                    int offset = (this.tbOrdenBody.DataBodyRange == null) ? this.tbOrdenBody.HeaderRowRange.Row + ++count : this.tbOrdenBody.DataBodyRange.Rows.Row + count++;
 
-                this.Range["A" + offset].Value = currentOrden.Orden;
-                this.Range["B" + offset].Value = currentOrden.Equipo;
-                this.Range["C" + offset].Value = currentOrden.Equipo.Costo;
-                this.Range["D" + offset].Value = currentOrden.Cantidad;
+                    this.Range["A" + offset].Value = currentOrden.Orden;
+                    this.Range["B" + offset].Value = currentOrden.Equipo.Ref;
+                    this.Range["C" + offset].Value = currentOrden.Equipo.Costo;
+                    this.Range["D" + offset].Value = currentOrden.Cantidad;
 
-                this.tbOrdenBody.ListRows.AddEx(System.Type.Missing, true);
+                    this.tbOrdenBody.ListRows.AddEx(System.Type.Missing, true);
+                }
             }
         }
 

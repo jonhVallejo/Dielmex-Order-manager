@@ -136,25 +136,35 @@ namespace Dielmex_Order_Manager
         }
         private void btAdd_Click(object sender, EventArgs e)
         {
-            // Combo box para insertar 
+            /*
+             * Combo box para insertar 
+             */
             ComboBox temp;
             temp = new ComboBox();
 
-            // Se asocia el datasource a el control
+            /*
+             * Se asocia el datasource a el control
+             */
             temp.DataSource =  new BindingSource(Hoja1._services, null);
             temp.DisplayMember = "_ref";
 
-            // Evento para indicar cuando se cambia algun dato
+            /*
+             * Evento para indicar cuando se cambia algun dato
+             */
             temp.SelectedValueChanged += temp_SelectedValueChanged;
 
-            // La llave se forma por la dirección donde va a ser insertada.
-            String key;
+            /*
+             * La llave se forma por la dirección donde va a ser insertada.
+             */
+            int key;
 
-            key ="" + (this.tbBody.DataBodyRange.Rows.Row + tbBody.DataBodyRange.Rows.Count - 1)  ;
+            key = this.tbBody.DataBodyRange.Rows.Row + tbBody.DataBodyRange.Rows.Count - 1;
 
             this.comboBoxes.Add(temp);
 
-            // Inserta nueva fila en la tabla
+            /*
+             * Inserta nueva fila en la tabla
+             */
             this.tbBody.ListRows.AddEx(System.Type.Missing, true);
             
             this.Controls.AddControl(temp,Globals.Hoja3.Range["A" + key], "" + temp.GetHashCode());
@@ -219,8 +229,11 @@ namespace Dielmex_Order_Manager
         {
             switch (_actionButton)
             {
+                /*
+                 * Habilitar los combos para editar la orden, el boton para añdir conceptos y cambia
+                 * el estado del boton de nuevo a cancelar.
+                 */
                 case ActionForButtonNew.NEW:
-                    //Habilitar campos y sacar el ultimo folio
                     btNuevo.Text = "Cancelar";
                     _actionButton = ActionForButtonNew.CANCEL;
                     btGuardar.Enabled = true;
@@ -228,13 +241,19 @@ namespace Dielmex_Order_Manager
                     cbEquipo.Visible = true;
                     cbEquipo.Enabled = true;
 
-                    // Buscar el ultimo indice
+                    /*
+                     * Busca la ultima orden respecto a su folio y si no hay aun ninguna
+                     * asigna el folio -1 por default.
+                     */
                     var maxValue = Hoja6._ordenes.Count > 0 ? Hoja6._ordenes.Max(el => el.Folio ) : 0;
 
                     tempOrden = new Orden();
                     tempOrden.Folio = maxValue + 1;
                     tempOrden.FechaServicio = DateTime.Now;
 
+                    /*
+                     * Pasa la orden a la hoja de excel.
+                     */
                     renderOrden(tempOrden);
 
 
@@ -292,23 +311,27 @@ namespace Dielmex_Order_Manager
 
         private void button2_Click(object sender, EventArgs e)
         {
-            // Guardar la orden.
-
-            // Actualizar los otros campos que si son modificables
+            /*
+             * Actualizar los otros campos que si son modificables
+             */
             tempOrden.CentroTrabajo = (string)this.Range["B12"].Value;
             tempOrden.Delegacion = (string)this.Range["B13"].Value;
             tempOrden.FechaServicio = (DateTime)this.Range["F5"].Value;
             tempOrden.Tecnico = (string)this.Range["F9"].Value;
             tempOrden.Recibio = (string)this.Range["F11"].Value;
 
-            if (Hoja6._ordenes.Exists(el => el.Folio == tempOrden.Folio)) // Se esta editando
+            /*
+             * Se esta editando
+             */
+            if (Hoja6._ordenes.Exists(el => el.Folio == tempOrden.Folio))
             {
                 int index = Hoja6._ordenes.FindIndex(el =>
                 {
                     return el.Folio == tempOrden.Folio;
                 });
-
-                // Actualizar el equipo is es que se edito
+                /*
+                 * Actualizar el equipo is es que se edito
+                 */
                 if (tempOrden.Equipo.NEconomico != ((Inventario)cbEquipo.SelectedItem).NEconomico)
                 {
                     tempOrden.Equipo = (Inventario)cbEquipo.SelectedItem;
@@ -317,30 +340,35 @@ namespace Dielmex_Order_Manager
 
 
                 Hoja6._ordenes[index] = tempOrden;
-                
+
+                Globals.Hoja6.save();
             }
-            else // Es nueva
+            /*
+             * Es nueva
+             */
+            else
             {
                 tempOrden.Equipo = (Inventario)cbEquipo.SelectedItem;
-
+                /*
+                 * Esto no funciona en tiempo de ejecución, para que pueda ser visualizado tiene que
+                 * guardarse el excel y luego instanciar el excelqueryfactory.
+                 * 
                 var book = new ExcelQueryFactory(Globals.ThisWorkbook.FullName);
-
                 string startRange, endRange;
-
                 string tr = tbBody.Range.Address;
                 tr = tr.Replace("$", "");
-
                 startRange = tr.Split(':')[0];
                 endRange = tr.Split(':')[1];
-
-                /*
                 var temp = (from row in book.WorksheetRange(startRange, endRange, "Captura")
                             let item = new Tuple<string, string>(row["Cantidad"].Cast<string>(), row["Clave"].Cast<string>())
                           
                            select item).ToList();
-
                 */
 
+
+                /*
+                 * Mapea la tabla del cuerpo de la orden, para generar los conceptos asociados a la orden. 
+                 */
                 List<Tuple<string, double>> temp = new List<Tuple<string,double>>();
                 string item1;
                 double item2;
@@ -355,17 +383,20 @@ namespace Dielmex_Order_Manager
                 }
 
 
+                /*
+                 * Una vez mapeados los elementos, recorre la lista creada y los convierte en objetos
+                 */
                 var res = temp.Select(element =>
                 {
-                    ConceptoOrden tempConcepto;
-                    tempConcepto = new ConceptoOrden();
+                    ConceptoOrden tempConcepto = new ConceptoOrden();
 
+                    /*
+                     * Busca el servicio asociado en la lista de servicios para
+                     * añadirlo en el equipo que se esta creando.
+                     */
                     tempConcepto.Equipo = Hoja1._services.Where(el =>  el.Ref == element.Item1 ).FirstOrDefault();
-
                     tempConcepto.Orden = tempOrden.Folio;
-
                     tempConcepto.Cantidad = element.Item2;
-
                     tempConcepto.SubTotal = tempConcepto.Cantidad * tempConcepto.Equipo.Costo;
 
                     return tempConcepto;
@@ -373,8 +404,16 @@ namespace Dielmex_Order_Manager
 
                 tempOrden.Conceptos = res.ToList();
 
+                /*
+                 * Se añaden los objetos que se acaban de crear a las colecciones globales.
+                 */
+                Hoja7._conceptos.AddRange(tempOrden.Conceptos);
                 Hoja6._ordenes.Add(tempOrden);
+                
                 Globals.Hoja6.save();
+                Globals.Hoja7.save();
+
+                button1_Click(null, null);
             }
         }
 
