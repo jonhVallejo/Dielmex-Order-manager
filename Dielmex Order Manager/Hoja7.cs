@@ -16,7 +16,7 @@ namespace Dielmex_Order_Manager
 {
     public partial class Hoja7
     {
-        internal static List<ConceptoOrden> _conceptos = new List<ConceptoOrden>();
+        internal static List<OrderItem> _itemsOrder = new List<OrderItem>();
 
 
         internal event endLoaded onLoaded;
@@ -43,15 +43,15 @@ namespace Dielmex_Order_Manager
 
             var res = auxList.Select(element =>
             {
-                ConceptoOrden temp;
-                temp = new ConceptoOrden();
-                temp.Orden = element.Item1;
+                OrderItem temp;
+                temp = new OrderItem();
+                temp.OrderNumber = element.Item1;
                 if (element.Item2 != null)
                 {
-                    temp.Equipo = Hoja1._services.Where(currentService => currentService.Ref == element.Item2).FirstOrDefault();
-                    temp.Cantidad = element.Item3;
+                    temp.Equipment = Hoja1._services.Where(currentService => currentService.ServiceId == element.Item2).FirstOrDefault();
+                    temp.Quantity = element.Item3;
 
-                    temp.SubTotal = temp.Cantidad * temp.Equipo.Costo;
+                    temp.SubTotal = temp.Quantity * temp.Equipment.Cost;
                 }
                
                
@@ -61,7 +61,7 @@ namespace Dielmex_Order_Manager
             });
 
 
-            _conceptos = res.ToList();
+            _itemsOrder = res.ToList();
 
             onLoaded();
 
@@ -75,16 +75,16 @@ namespace Dielmex_Order_Manager
             }
             int count = 0;
 
-            foreach (ConceptoOrden currentOrden in _conceptos)
+            foreach (OrderItem currentOrder in _itemsOrder)
             {
-                if (currentOrden.Equipo != null)
+                if (currentOrder.Equipment != null)
                 {
                     int offset = (this.tbOrdenBody.DataBodyRange == null) ? this.tbOrdenBody.HeaderRowRange.Row + ++count : this.tbOrdenBody.DataBodyRange.Rows.Row + count++;
 
-                    this.Range["A" + offset].Value = currentOrden.Orden;
-                    this.Range["B" + offset].Value = currentOrden.Equipo.Ref;
-                    this.Range["C" + offset].Value = currentOrden.Equipo.Costo;
-                    this.Range["D" + offset].Value = currentOrden.Cantidad;
+                    this.Range["A" + offset].Value = currentOrder.OrderNumber;
+                    this.Range["B" + offset].Value = currentOrder.Equipment.ServiceId;
+                    this.Range["C" + offset].Value = currentOrder.Equipment.Cost;
+                    this.Range["D" + offset].Value = currentOrder.Quantity;
 
                     this.tbOrdenBody.ListRows.AddEx(System.Type.Missing, true);
                 }

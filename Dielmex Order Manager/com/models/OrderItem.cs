@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace Dielmex_Order_Manager.com.models
 {
-    class ConceptoOrden
+    class OrderItem
     {
         /*
          *Orden	Clave	Precio Unitario	Cantidad	Subtotal
 
          */
-        internal int Orden { get; set; }
-        internal Servicio Equipo { get; set; }
-        internal double Cantidad { get; set; }
+        internal int OrderNumber { get; set; }
+        internal Service Equipment { get; set; }
+        internal double Quantity { get; set; }
         internal double SubTotal { get; set; }
     }
 }

@@ -23,34 +23,39 @@ namespace Dielmex_Order_Manager
 
         #endregion
 
+        private string[] _DEFAULT_COLUMN_NAMES = { "CATEGORIA", "TIPO", "MARCA", "MODELO", "NECONOMICO", "CENTRO_TRABAJO", "DELEGACION" };
+
         internal event endLoaded onLoaded;
 
-        internal static List<Inventario> _inventary = new List<Inventario>();
+        internal static List<Inventary> _inventary = new List<Inventary>();
+
+        internal static List<String> _dynamicColumNames;
+
         private void Hoja2_Startup(object sender, System.EventArgs e)
         {
-           
-
-
         }
 
         internal void Hoja1_onLoaded()
         {
-            // Inicializacion de la coleccion del inventario.
-            _inventary = new List<Inventario>();
+            _inventary = new List<Inventary>();
 
             var book = new ExcelQueryFactory(Globals.ThisWorkbook.FullName);
 
-            var res = (from row in book.Worksheet("Inventario")
-                       let item = new Inventario
+            var columNames = book.GetColumnNames(this.Name);
+
+            _dynamicColumNames = columNames.Except(_DEFAULT_COLUMN_NAMES).ToList();
+
+
+            var res = (from row in book.Worksheet(this.Name)
+                       let item = new Inventary
                        {
-                           Categoria = row["CATEGORIA"].Cast<string>(),
-                           Tipo = row["TIPO"].Cast<string>(),
-                           Marca = row["MARCA"].Cast<string>(),
-                           Modelo = row["MODELO"].Cast<int>(),
-                           Placa = row["PLACA"].Cast<string>(),
-                           NEconomico = row["NECONOMICO"].Cast<string>(),
-                           Red = row["RED"].Cast<string>(),
-                           Cilindros = row["CILINDROS"] != null ? row["CILINDROS"].Cast<int>() : 0
+                           Category = row["CATEGORIA"].Cast<string>(),
+                           Type = row["TIPO"].Cast<string>(),
+                           Brand = row["MARCA"].Cast<string>(),
+                           Model = row["MODELO"].Cast<string>(),
+                           SerialNumber = row["NECONOMICO"].Cast<string>(),
+                           WorkCentre = row["CENTRO_TRABAJO"].Cast<string>(),
+                           Workplace = row["DELEGACION"].Cast<string>()
                        }
                        select item).ToList();
             _inventary = res;

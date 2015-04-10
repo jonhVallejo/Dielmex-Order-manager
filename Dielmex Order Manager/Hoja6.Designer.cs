@@ -13,11 +13,13 @@ namespace Dielmex_Order_Manager {
     
     
     /// 
-    [Microsoft.VisualStudio.Tools.Applications.Runtime.StartupObjectAttribute(6)]
+    [Microsoft.VisualStudio.Tools.Applications.Runtime.StartupObjectAttribute(7)]
     [global::System.Security.Permissions.PermissionSetAttribute(global::System.Security.Permissions.SecurityAction.Demand, Name="FullTrust")]
     public sealed partial class Hoja6 : Microsoft.Office.Tools.Excel.WorksheetBase {
         
         internal Microsoft.Office.Tools.Excel.ListObject tbOrdenHeader;
+        
+        internal Microsoft.Office.Tools.Excel.NamedRange tbOrdenHeaderOrdenNumber;
         
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "12.0.0.0")]
         private global::System.Object missing = global::System.Type.Missing;
@@ -117,6 +119,7 @@ namespace Dielmex_Order_Manager {
         private void BeginInitialization() {
             this.BeginInit();
             this.tbOrdenHeader.BeginInit();
+            this.tbOrdenHeaderOrdenNumber.BeginInit();
         }
         
         /// 
@@ -124,6 +127,7 @@ namespace Dielmex_Order_Manager {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "12.0.0.0")]
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         private void EndInitialization() {
+            this.tbOrdenHeaderOrdenNumber.EndInit();
             this.tbOrdenHeader.EndInit();
             this.EndInit();
         }
@@ -134,6 +138,7 @@ namespace Dielmex_Order_Manager {
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         private void InitializeControls() {
             this.tbOrdenHeader = Globals.Factory.CreateListObject(null, null, "Hoja6:tbOrdenHeader", "tbOrdenHeader", this);
+            this.tbOrdenHeaderOrdenNumber = Globals.Factory.CreateNamedRange(null, null, "tbOrdenHeaderOrdenNumber", "tbOrdenHeaderOrdenNumber", this);
         }
         
         /// 
@@ -145,6 +150,10 @@ namespace Dielmex_Order_Manager {
             // tbOrdenHeader
             // 
             this.tbOrdenHeader.DefaultDataSourceUpdateMode = System.Windows.Forms.DataSourceUpdateMode.Never;
+            // 
+            // tbOrdenHeaderOrdenNumber
+            // 
+            this.tbOrdenHeaderOrdenNumber.DefaultDataSourceUpdateMode = System.Windows.Forms.DataSourceUpdateMode.Never;
             // 
             // Hoja6
             // 
@@ -162,6 +171,7 @@ namespace Dielmex_Order_Manager {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "12.0.0.0")]
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         protected override void OnShutdown() {
+            this.tbOrdenHeaderOrdenNumber.Dispose();
             this.tbOrdenHeader.Dispose();
             base.OnShutdown();
         }

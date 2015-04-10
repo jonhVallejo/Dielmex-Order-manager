@@ -16,61 +16,55 @@ namespace Dielmex_Order_Manager
 {
     public partial class Hoja1
     {
-
+        private string[] _DEFAULT_COLUMN_NAMES = { "REF", 
+                                                         "UNIDAD DE MEDIDA",
+                                                         "DESCRIPCION", 
+                                                         "TOTAL"};
 
         internal event endLoaded onLoaded;
 
-        internal static List<Servicio> _services = new List<Servicio>();
+        internal static List<Service> _services = new List<Service>();
+
+        internal static List<String> _dynamicColumNames;
 
         private void Hoja1_Startup(object sender, System.EventArgs e)
         {
-            /*
-            Excel.Range table = this.Tabla1.Range;
-
-            bool header = true;
             
-            int offset;
-
-            offset = table.Column - 1;
-
-            foreach (Excel.Range row in table.Rows)
-            {
-                if (!header)
-                {
-                    Servicio temp;
-                    temp = new Servicio();
-
-                    temp.Ref = row.Cells[1, offset + 1].value;
-                    temp.UnidadMedida = row.Cells[1, offset + 2].value;
-                    temp.Descripcion = row.Cells[1, offset + 3].value;
-                    temp.Refacciones = (double)row.Cells[1, offset + 4].value;
-                    temp.ManoObra = (double)row.Cells[1, offset + 5].value;
-                    temp.Costo = (double)row.Cells[1, offset + 6].value;
-
-                    _services.Add(temp);
-                }
-                else
-                {
-                    header = false;
-                }
-            }
-             * */
 
             var book = new ExcelQueryFactory(Globals.ThisWorkbook.FullName);
 
-            var res = (from row in book.Worksheet("Precios")
-                       let item = new Servicio
+            /*
+             * Get the column names in the sheet 1. This is used
+             * by know the dynamic columns.
+             */
+            var columNames = book.GetColumnNames(this.Name);
+
+            /*
+             * This Enumerable object represent the dynamic columns. The dynamic
+             * columns aren't considers in the object model but can be saveds in
+             * a list for search with some excel function.
+             */
+            _dynamicColumNames = columNames.Except(_DEFAULT_COLUMN_NAMES).ToList();
+
+            
+
+            /*
+             * LINQ to sheet for retreive all values in a table
+             */
+            var res = (from row in book.Worksheet(this.Name)
+                       let item = new Service
                        {
-                           Ref = row["REF"].Cast<string>(),
-                           UnidadMedida = row["UNIDAD DE MEDIDA"].Cast<string>(),
-                           Descripcion = row["DESCRIPCION"].Cast<string>(),
-                           Refacciones = row["REFACCIONES"].Cast<double>(),
-                           ManoObra = row["MANO DE OBRA"].Cast<double>(),
-                           Costo = row["TOTAL"].Cast<double>()
+                           ServiceId = row["REF"].Cast<string>(),
+                           UnitOfMeasurement = row["UNIDAD DE MEDIDA"].Cast<string>(),
+                           Description = row["DESCRIPCION"].Cast<string>(),
+                           Cost = row["TOTAL"].Cast<double>()
                        }
                        select item).ToList();
             _services = res;
 
+            /*
+             * Callback for syncronize the load of data.
+             */
             onLoaded();
 
         }

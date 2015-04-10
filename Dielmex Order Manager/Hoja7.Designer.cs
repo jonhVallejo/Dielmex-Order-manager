@@ -13,7 +13,7 @@ namespace Dielmex_Order_Manager {
     
     
     /// 
-    [Microsoft.VisualStudio.Tools.Applications.Runtime.StartupObjectAttribute(7)]
+    [Microsoft.VisualStudio.Tools.Applications.Runtime.StartupObjectAttribute(8)]
     [global::System.Security.Permissions.PermissionSetAttribute(global::System.Security.Permissions.SecurityAction.Demand, Name="FullTrust")]
     public sealed partial class Hoja7 : Microsoft.Office.Tools.Excel.WorksheetBase {
         

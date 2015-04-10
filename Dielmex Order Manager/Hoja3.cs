@@ -18,10 +18,10 @@ namespace Dielmex_Order_Manager
     public partial class Hoja3
     {
 
-        private List<ComboBox> comboBoxes;
-        private List<Button> buttons;
+        private List<ComboBox> _comboBoxes;
+        private List<Button> _buttons;
 
-        private Orden tempOrden;
+        private Order _tempOrder;
 
         enum ActionForButtonNew
         {
@@ -36,23 +36,45 @@ namespace Dielmex_Order_Manager
 
         private void Hoja3_Startup(object sender, System.EventArgs e)
         {
-            cbEquipo.DisplayMember = "Dielmex_Order_Manager.com.models.Inventario.NEconomico";
-            cbEquipo.ValueMember = "NEconomico";
             cbEquipo.DataSource = Hoja2._inventary;
             cbEquipo.Visible = false;
 
-            cbOrdenNumber.DataSource = Hoja6._ordenes;
+            cbOrdenNumber.DataSource = Hoja6._orders;
             cbOrdenNumber.DisplayMember = "Folio";
 
             cbOrdenNumber.SelectedValueChanged += cbOrdenNumber_SelectedValueChanged;
 
             cbEquipo.SelectedValueChanged += cbEquipo_SelectedValueChanged;
 
-            comboBoxes = new List<ComboBox>();
-            buttons = new List<Button>();
+            _comboBoxes = new List<ComboBox>();
+            _buttons = new List<Button>();
 
             _offsetForComboxInTable += this.Controls.Count;
             _firstIndexForTable = 19;
+
+
+            /*
+             * Take the name of the dynamic value
+             */
+            string dynamicValue = this.Range["A14"].Value;
+
+            /*
+             * If the dynamic value is specified, then we can search. 
+             */
+            if (dynamicValue != null && dynamicValue.Length > 0 && Hoja2._dynamicColumNames.Exists(culumnName => culumnName == dynamicValue))
+            {
+                /*
+                 * dynamicValue is the tag for search in the columns of the inventary. Before of search the data, we go to modify the value
+                 * of the specified cell using the function buscar (Excel Spanish version).
+                 */
+                string formula = String.Format("=BUSCAR(A7, Tabla2[NECONOMICO], Tabla2[{0}])", dynamicValue);
+
+                this.Range["B14"].Formula = formula;
+            }
+            else
+            {
+                this.Range["B14"].Value = "";
+            }
         }
 
         private void Hoja3_Shutdown(object sender, System.EventArgs e)
@@ -90,45 +112,52 @@ namespace Dielmex_Order_Manager
             btNuevo.Enabled = true;
 
             
-            tempOrden = (Orden)cbOrdenNumber.SelectedItem;
+            _tempOrder = (Order)cbOrdenNumber.SelectedItem;
 
-            renderOrden(tempOrden);
+            renderOrder(_tempOrder);
         }
 
         void cbEquipo_SelectedValueChanged(object sender, EventArgs e)
         {
-            Globals.Hoja3.Cells[9, 2].value = ((Inventario)cbEquipo.SelectedItem).Marca;
-            Globals.Hoja3.Cells[10, 2].value = ((Inventario)cbEquipo.SelectedItem).Modelo;
-            Globals.Hoja3.Cells[11, 2].value = ((Inventario)cbEquipo.SelectedItem).Tipo;
+            Globals.Hoja3.Cells[7, 1].value = ((Inventary)cbEquipo.SelectedItem).SerialNumber;
+            Globals.Hoja3.Cells[9, 2].value = ((Inventary)cbEquipo.SelectedItem).Brand;
+            Globals.Hoja3.Cells[10, 2].value = ((Inventary)cbEquipo.SelectedItem).Model;
+            Globals.Hoja3.Cells[11, 2].value = ((Inventary)cbEquipo.SelectedItem).Type;
+            this.Range["B12"].Value = ((Inventary)cbEquipo.SelectedItem).WorkCentre;
+            this.Range["B13"].Value = ((Inventary)cbEquipo.SelectedItem).Workplace;
             
         }
 
-        private void renderOrden(Orden orden)
+        private void renderOrder(Order order)
         {
-            if (orden.Equipo != null)
+            if (order.Equipment != null)
             {
-                cbEquipo.SelectedIndex = Hoja2._inventary.FindIndex(el => { return el.NEconomico == orden.Equipo.NEconomico; });
+                cbEquipo.SelectedIndex = Hoja2._inventary.FindIndex(el => { return el.SerialNumber == order.Equipment.SerialNumber; });
             }
             cbOrdenNumber.Enabled = false;
             cbOrdenNumber.Visible = false;
 
-            Globals.Hoja3.Range["b12"].Value = orden.CentroTrabajo;
-            Globals.Hoja3.Range["b13"].Value = orden.Delegacion;
-            Globals.Hoja3.Range["f5"].Value = orden.FechaServicio;
-            Globals.Hoja3.Range["f7"].Value = orden.Folio;
-            Globals.Hoja3.Range["f9"].Value = orden.Tecnico;
-            Globals.Hoja3.Range["f11"].Value = orden.Recibio;
-            int count = 0;
-            if (orden.Conceptos != null)
+            if (order.Equipment != null)
             {
-                foreach (ConceptoOrden current in orden.Conceptos)
+
+                Globals.Hoja3.Range["b12"].Value = order.Equipment.WorkCentre;
+                Globals.Hoja3.Range["b13"].Value = order.Equipment.Workplace;
+            }
+            Globals.Hoja3.Range["f5"].Value = order.ServiceDate;
+            Globals.Hoja3.Range["f7"].Value = order.Folio;
+            Globals.Hoja3.Range["f9"].Value = order.Expert;
+            Globals.Hoja3.Range["f11"].Value = order.ReceivedBy;
+            int count = 0;
+            if (order.OrderItems != null)
+            {
+                foreach (OrderItem current in order.OrderItems)
                 {
                     int offset = this.tbBody.DataBodyRange.Rows.Row + count++;
-                    Globals.Hoja3.Range["A" + offset, "A" + offset].Value = current.Equipo.Ref;
-                    Globals.Hoja3.Range["B" + offset, "B" + offset].Value = current.Equipo.Descripcion;
-                    Globals.Hoja3.Range["C" + offset, "C" + offset].Value = current.Equipo.UnidadMedida;
-                    Globals.Hoja3.Range["D" + offset, "D" + offset].Value = current.Equipo.Costo;
-                    Globals.Hoja3.Range["E" + offset, "E" + offset].Value = current.Cantidad;
+                    Globals.Hoja3.Range["A" + offset, "A" + offset].Value = current.Equipment.ServiceId;
+                    Globals.Hoja3.Range["B" + offset, "B" + offset].Value = current.Equipment.Description;
+                    Globals.Hoja3.Range["C" + offset, "C" + offset].Value = current.Equipment.UnitOfMeasurement;
+                    Globals.Hoja3.Range["D" + offset, "D" + offset].Value = current.Equipment.Cost;
+                    Globals.Hoja3.Range["E" + offset, "E" + offset].Value = current.Quantity;
 
                     this.tbBody.ListRows.AddEx(System.Type.Missing, true);
                 }
@@ -160,7 +189,7 @@ namespace Dielmex_Order_Manager
 
             key = this.tbBody.DataBodyRange.Rows.Row + tbBody.DataBodyRange.Rows.Count - 1;
 
-            this.comboBoxes.Add(temp);
+            this._comboBoxes.Add(temp);
 
             /*
              * Inserta nueva fila en la tabla
@@ -172,26 +201,26 @@ namespace Dielmex_Order_Manager
             Button tempButton = new Button();
             tempButton.Text = "Eliminar";
             tempButton.Click +=tempButton_Click;
-            this.buttons.Add(tempButton);
+            this._buttons.Add(tempButton);
 
             this.Controls.AddControl(tempButton, Globals.Hoja3.Range["G" + key], "" + tempButton.GetHashCode());
 
         }
         /// <summary>
-        /// Elimina un row de la del cuerpo de la orden
+        /// Elimina un row de la del cuerpo de la order
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         void tempButton_Click(object sender, EventArgs e)
         {
-            int index = this.buttons.FindIndex(b =>
+            int index = this._buttons.FindIndex(b =>
             {
                 return b.GetHashCode() == ((Button)sender).GetHashCode();
             });
 
-            ComboBox temp = this.comboBoxes[index];
-            this.comboBoxes.RemoveAt(index);
-            this.buttons.RemoveAt(index);
+            ComboBox temp = this._comboBoxes[index];
+            this._comboBoxes.RemoveAt(index);
+            this._buttons.RemoveAt(index);
 
 
 
@@ -210,16 +239,16 @@ namespace Dielmex_Order_Manager
         void temp_SelectedValueChanged(object sender, EventArgs e)
         {
 
-            int offset = this.comboBoxes.FindIndex(b =>
+            int offset = this._comboBoxes.FindIndex(b =>
             {
                 return b.GetHashCode() == ((ComboBox)sender).GetHashCode();
             });
             offset += this.tbBody.DataBodyRange.Rows.Row;
 
-            Globals.Hoja3.Range["A" + offset, "A" + offset].Value = ((Servicio)((ComboBox)sender).SelectedItem).Ref;
-            Globals.Hoja3.Range["B" + offset, "B" + offset].Value = ((Servicio)((ComboBox)sender).SelectedItem).Descripcion;
-            Globals.Hoja3.Range["C" + offset, "C" + offset].Value = ((Servicio)((ComboBox)sender).SelectedItem).UnidadMedida;
-            Globals.Hoja3.Range["D" + offset, "D" + offset].Value = ((Servicio)((ComboBox)sender).SelectedItem).Costo;
+            Globals.Hoja3.Range["A" + offset, "A" + offset].Value = ((Service)((ComboBox)sender).SelectedItem).ServiceId;
+            Globals.Hoja3.Range["B" + offset, "B" + offset].Value = ((Service)((ComboBox)sender).SelectedItem).Description;
+            Globals.Hoja3.Range["C" + offset, "C" + offset].Value = ((Service)((ComboBox)sender).SelectedItem).UnitOfMeasurement;
+            Globals.Hoja3.Range["D" + offset, "D" + offset].Value = ((Service)((ComboBox)sender).SelectedItem).Cost;
 
 
 
@@ -230,7 +259,7 @@ namespace Dielmex_Order_Manager
             switch (_actionButton)
             {
                 /*
-                 * Habilitar los combos para editar la orden, el boton para añdir conceptos y cambia
+                 * Habilitar los combos para editar la order, el boton para añdir conceptos y cambia
                  * el estado del boton de nuevo a cancelar.
                  */
                 case ActionForButtonNew.NEW:
@@ -242,19 +271,19 @@ namespace Dielmex_Order_Manager
                     cbEquipo.Enabled = true;
 
                     /*
-                     * Busca la ultima orden respecto a su folio y si no hay aun ninguna
+                     * Busca la ultima order respecto a su folio y si no hay aun ninguna
                      * asigna el folio -1 por default.
                      */
-                    var maxValue = Hoja6._ordenes.Count > 0 ? Hoja6._ordenes.Max(el => el.Folio ) : 0;
+                    var maxValue = Hoja6._orders.Count > 0 ? Hoja6._orders.Max(el => el.Folio ) : 0;
 
-                    tempOrden = new Orden();
-                    tempOrden.Folio = maxValue + 1;
-                    tempOrden.FechaServicio = DateTime.Now;
+                    _tempOrder = new Order();
+                    _tempOrder.Folio = maxValue + 1;
+                    _tempOrder.ServiceDate = DateTime.Now;
 
                     /*
-                     * Pasa la orden a la hoja de excel.
+                     * Pasa la order a la hoja de excel.
                      */
-                    renderOrden(tempOrden);
+                    renderOrder(_tempOrder);
 
 
                     break;
@@ -305,8 +334,8 @@ namespace Dielmex_Order_Manager
             }
 
             count = this.Controls.Count;
-            buttons.Clear();
-            comboBoxes.Clear();
+            _buttons.Clear();
+            _comboBoxes.Clear();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -314,32 +343,30 @@ namespace Dielmex_Order_Manager
             /*
              * Actualizar los otros campos que si son modificables
              */
-            tempOrden.CentroTrabajo = (string)this.Range["B12"].Value;
-            tempOrden.Delegacion = (string)this.Range["B13"].Value;
-            tempOrden.FechaServicio = (DateTime)this.Range["F5"].Value;
-            tempOrden.Tecnico = (string)this.Range["F9"].Value;
-            tempOrden.Recibio = (string)this.Range["F11"].Value;
+            _tempOrder.ServiceDate = (DateTime)this.Range["F5"].Value;
+            _tempOrder.Expert = (string)this.Range["F9"].Value;
+            _tempOrder.ReceivedBy = (string)this.Range["F11"].Value;
 
             /*
              * Se esta editando
              */
-            if (Hoja6._ordenes.Exists(el => el.Folio == tempOrden.Folio))
+            if (Hoja6._orders.Exists(el => el.Folio == _tempOrder.Folio))
             {
-                int index = Hoja6._ordenes.FindIndex(el =>
+                int index = Hoja6._orders.FindIndex(el =>
                 {
-                    return el.Folio == tempOrden.Folio;
+                    return el.Folio == _tempOrder.Folio;
                 });
                 /*
                  * Actualizar el equipo is es que se edito
                  */
-                if (tempOrden.Equipo.NEconomico != ((Inventario)cbEquipo.SelectedItem).NEconomico)
+                if (_tempOrder.Equipment.SerialNumber != ((Inventary)cbEquipo.SelectedItem).SerialNumber)
                 {
-                    tempOrden.Equipo = (Inventario)cbEquipo.SelectedItem;
+                    _tempOrder.Equipment = (Inventary)cbEquipo.SelectedItem;
                 }
                
 
 
-                Hoja6._ordenes[index] = tempOrden;
+                Hoja6._orders[index] = _tempOrder;
 
                 Globals.Hoja6.save();
             }
@@ -348,7 +375,7 @@ namespace Dielmex_Order_Manager
              */
             else
             {
-                tempOrden.Equipo = (Inventario)cbEquipo.SelectedItem;
+                _tempOrder.Equipment = (Inventary)cbEquipo.SelectedItem;
                 /*
                  * Esto no funciona en tiempo de ejecución, para que pueda ser visualizado tiene que
                  * guardarse el excel y luego instanciar el excelqueryfactory.
@@ -367,7 +394,7 @@ namespace Dielmex_Order_Manager
 
 
                 /*
-                 * Mapea la tabla del cuerpo de la orden, para generar los conceptos asociados a la orden. 
+                 * Mapea la tabla del cuerpo de la order, para generar los conceptos asociados a la order. 
                  */
                 List<Tuple<string, double>> temp = new List<Tuple<string,double>>();
                 string item1;
@@ -388,27 +415,27 @@ namespace Dielmex_Order_Manager
                  */
                 var res = temp.Select(element =>
                 {
-                    ConceptoOrden tempConcepto = new ConceptoOrden();
+                    OrderItem tempConcepto = new OrderItem();
 
                     /*
-                     * Busca el servicio asociado en la lista de servicios para
+                     * Busca el Service asociado en la lista de Services para
                      * añadirlo en el equipo que se esta creando.
                      */
-                    tempConcepto.Equipo = Hoja1._services.Where(el =>  el.Ref == element.Item1 ).FirstOrDefault();
-                    tempConcepto.Orden = tempOrden.Folio;
-                    tempConcepto.Cantidad = element.Item2;
-                    tempConcepto.SubTotal = tempConcepto.Cantidad * tempConcepto.Equipo.Costo;
+                    tempConcepto.Equipment = Hoja1._services.Where(el =>  el.ServiceId == element.Item1 ).FirstOrDefault();
+                    tempConcepto.OrderNumber = _tempOrder.Folio;
+                    tempConcepto.Quantity = element.Item2;
+                    tempConcepto.SubTotal = tempConcepto.Quantity * tempConcepto.Equipment.Cost;
 
                     return tempConcepto;
                 });
 
-                tempOrden.Conceptos = res.ToList();
+                _tempOrder.OrderItems = res.ToList();
 
                 /*
                  * Se añaden los objetos que se acaban de crear a las colecciones globales.
                  */
-                Hoja7._conceptos.AddRange(tempOrden.Conceptos);
-                Hoja6._ordenes.Add(tempOrden);
+                Hoja7._itemsOrder.AddRange(_tempOrder.OrderItems);
+                Hoja6._orders.Add(_tempOrder);
                 
                 Globals.Hoja6.save();
                 Globals.Hoja7.save();

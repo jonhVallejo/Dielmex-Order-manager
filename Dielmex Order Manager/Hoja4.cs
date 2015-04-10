@@ -9,12 +9,62 @@ using Microsoft.Office.Tools.Excel;
 using Microsoft.VisualStudio.Tools.Applications.Runtime;
 using Excel = Microsoft.Office.Interop.Excel;
 using Office = Microsoft.Office.Core;
+using Dielmex_Order_Manager.com.models;
 
 namespace Dielmex_Order_Manager
 {
     public partial class Hoja4
     {
         private void Hoja4_Startup(object sender, System.EventArgs e)
+        {
+            this.BeforeRightClick += Hoja4_BeforeRightClick;
+            
+        }
+
+        void Hoja4_BeforeRightClick(Excel.Range Target, ref bool Cancel)
+        {
+            // Concatenar todos los datos de la orden seleccionada
+            double selectedOrder = (double)this.Range["A7"].Value;
+
+            var orderReference = Hoja6._orders.Find(order =>
+            {
+             
+                return order.Folio == selectedOrder;
+            });
+
+            
+
+            StringBuilder concatenateValues = new StringBuilder();
+
+                
+            if (orderReference != null)
+            {
+                orderReference.OrderItems.ForEach(element =>
+                {
+                    concatenateValues.Append(element.Equipment.ServiceId);
+                    concatenateValues.Append("    ");
+                    concatenateValues.Append(element.Equipment.Description);
+                    concatenateValues.Append("    ");
+                    concatenateValues.Append(element.Equipment.UnitOfMeasurement);
+                    concatenateValues.Append("    ");
+                    concatenateValues.Append(element.Quantity);
+                    concatenateValues.Append("    ");
+                    concatenateValues.Append(element.Equipment.Cost);
+                    concatenateValues.Append("    ");
+                    concatenateValues.Append(element.Quantity * element.Equipment.Cost);
+                    concatenateValues.Append("\n");
+                });
+                Target.WrapText = true;
+                Target.Value = concatenateValues.ToString();
+            }
+            
+            
+
+           
+
+        }
+
+        void Hoja4_ActivateEvent()
         {
         }
 

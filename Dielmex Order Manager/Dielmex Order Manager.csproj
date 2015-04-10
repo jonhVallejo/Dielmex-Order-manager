@@ -20,7 +20,7 @@
     <PublishUrl>publish\</PublishUrl>
     <InstallUrl />
     <TargetCulture>es</TargetCulture>
-    <ApplicationVersion>1.0.0.1</ApplicationVersion>
+    <ApplicationVersion>1.0.0.3</ApplicationVersion>
     <AutoIncrementApplicationRevision>true</AutoIncrementApplicationRevision>
     <UpdateEnabled>true</UpdateEnabled>
     <UpdateInterval>7</UpdateInterval>
@@ -143,10 +143,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="com\models\ConceptoOrden.cs" />
-    <Compile Include="com\models\Inventario.cs" />
-    <Compile Include="com\models\Orden.cs" />
-    <Compile Include="com\models\Servicio.cs" />
+    <Compile Include="com\models\OrderItem.cs" />
+    <Compile Include="com\models\Inventary.cs" />
+    <Compile Include="com\models\Order.cs" />
+    <Compile Include="com\models\Service.cs" />
     <Compile Include="Hoja1.cs">
       <DependentUpon>Programacion-Excel.xlsx</DependentUpon>
     </Compile>
@@ -189,6 +189,12 @@
     <Compile Include="Hoja7.Designer.cs">
       <DependentUpon>Hoja7.Designer.xml</DependentUpon>
     </Compile>
+    <Compile Include="Hoja9.cs">
+      <DependentUpon>Programacion-Excel.xlsx</DependentUpon>
+    </Compile>
+    <Compile Include="Hoja9.Designer.cs">
+      <DependentUpon>Hoja9.Designer.xml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ThisWorkbook.cs">
       <DependentUpon>Programacion-Excel.xlsx</DependentUpon>
@@ -207,11 +213,17 @@
     <EmbeddedResource Include="Hoja3.resx">
       <DependentUpon>Hoja3.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Hoja4.resx">
+      <DependentUpon>Hoja4.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Hoja6.resx">
       <DependentUpon>Hoja6.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Hoja7.resx">
       <DependentUpon>Hoja7.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Hoja9.resx">
+      <DependentUpon>Hoja9.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -228,6 +240,9 @@
     </None>
     <None Include="Hoja7.Designer.xml">
       <DependentUpon>Hoja7.cs</DependentUpon>
+    </None>
+    <None Include="Hoja9.Designer.xml">
+      <DependentUpon>Hoja9.cs</DependentUpon>
     </None>
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -296,14 +311,15 @@
     <VisualStudio>
       <FlavorProperties GUID="{BAA0C2D2-18E2-41B9-852F-F413020CAA33}">
         <ProjectProperties HostName="Programacion-Excel.xlsx" HostPackage="{3F2B7691-D1D1-402F-9370-2704A737CF60}" OfficeVersion="15.0" VstxVersion="4.0" ApplicationType="XLS" Language="CS" TemplatesPath="VSTOTemplates" DebugInfoExeName="C:\Program Files (x86)\Microsoft Office\Office15\Excel.exe" DebugInfoCommandLine="/x &quot;[$OUTPUT]Programacion-Excel.xlsx&quot;" />
-        <Host Name="Excel Document" Path=".\Programacion-Excel.xlsx" GeneratedCodeNamespace="Dielmex_Order_Manager" PublishedHash="D505674DA0695FE10AAA0179BCB77ECA17834B87">
-          <HostItem Name="Hoja1" Code="Hoja1.cs" CanonicalName="Hoja1" PublishedHash="3C2B8C05FFE7772F949AE667E076AE0B2FC26918" DisplayName="Precios" Blueprint="Hoja1.Designer.xml" GeneratedCode="Hoja1.Designer.cs" />
-          <HostItem Name="Hoja2" Code="Hoja2.cs" CanonicalName="Hoja2" PublishedHash="3069F6EAB7A3C49D2507AFED12CB4B59E6ADB6FD" DisplayName="Inventario" Blueprint="Hoja2.Designer.xml" GeneratedCode="Hoja2.Designer.cs" />
-          <HostItem Name="Hoja3" Code="Hoja3.cs" CanonicalName="Hoja3" PublishedHash="A3F542CA95281B82305F6D3E35D49ABE697A3052" DisplayName="Captura" Blueprint="Hoja3.Designer.xml" GeneratedCode="Hoja3.Designer.cs" />
+        <Host Name="Excel Document" Path=".\Programacion-Excel.xlsx" GeneratedCodeNamespace="Dielmex_Order_Manager" PublishedHash="B71B19A1FE33F2CC4FB9B7659CED87CC884411AF">
+          <HostItem Name="Hoja1" Code="Hoja1.cs" CanonicalName="Hoja1" PublishedHash="A58506E29915B28168D9EC0FA20DE95956A6D416" DisplayName="Precios" Blueprint="Hoja1.Designer.xml" GeneratedCode="Hoja1.Designer.cs" />
+          <HostItem Name="Hoja2" Code="Hoja2.cs" CanonicalName="Hoja2" PublishedHash="A72D9EE633B23D471A50D2A9D31B83B51582D920" DisplayName="Inventario" Blueprint="Hoja2.Designer.xml" GeneratedCode="Hoja2.Designer.cs" />
+          <HostItem Name="Hoja3" Code="Hoja3.cs" CanonicalName="Hoja3" PublishedHash="9DB099D79D1FA92493F6B66D881E5CC55EB46010" DisplayName="Captura" Blueprint="Hoja3.Designer.xml" GeneratedCode="Hoja3.Designer.cs" />
           <HostItem Name="Hoja4" Code="Hoja4.cs" CanonicalName="Hoja4" PublishedHash="513ADB80635149C1D6692B2177E5EC77E49F4491" DisplayName="OrdServ" Blueprint="Hoja4.Designer.xml" GeneratedCode="Hoja4.Designer.cs" />
           <HostItem Name="Hoja5" Code="Hoja5.cs" CanonicalName="Hoja5" PublishedHash="E0CA37B6690F5485FA1356057E7BB6F43D12DA42" DisplayName="Reporte" Blueprint="Hoja5.Designer.xml" GeneratedCode="Hoja5.Designer.cs" />
-          <HostItem Name="Hoja6" Code="Hoja6.cs" CanonicalName="Hoja6" DisplayName="DBOH" Blueprint="Hoja6.Designer.xml" GeneratedCode="Hoja6.Designer.cs" />
-          <HostItem Name="Hoja7" Code="Hoja7.cs" CanonicalName="Hoja7" DisplayName="DBOB" Blueprint="Hoja7.Designer.xml" GeneratedCode="Hoja7.Designer.cs" />
+          <HostItem Name="Hoja6" Code="Hoja6.cs" CanonicalName="Hoja6" PublishedHash="725668F0C30974A5D5B5A977CB7E3250B4A3472E" DisplayName="DBOH" Blueprint="Hoja6.Designer.xml" GeneratedCode="Hoja6.Designer.cs" />
+          <HostItem Name="Hoja7" Code="Hoja7.cs" CanonicalName="Hoja7" PublishedHash="6F67BDD1C1AFB06B5E8A76A395DB8E0A2D720A76" DisplayName="DBOB" Blueprint="Hoja7.Designer.xml" GeneratedCode="Hoja7.Designer.cs" />
+          <HostItem Name="Hoja9" Code="Hoja9.cs" CanonicalName="Hoja9" DisplayName="Hoja2" Blueprint="Hoja9.Designer.xml" GeneratedCode="Hoja9.Designer.cs" />
           <HostItem Name="ThisWorkbook" Code="ThisWorkbook.cs" CanonicalName="ThisWorkbook" PublishedHash="0105174FA624D47BD29E15C04C3B88088B9EEB91" Blueprint="ThisWorkbook.Designer.xml" GeneratedCode="ThisWorkbook.Designer.cs" />
         </Host>
       </FlavorProperties>
