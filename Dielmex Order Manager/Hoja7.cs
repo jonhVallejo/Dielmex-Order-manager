@@ -11,6 +11,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 using Office = Microsoft.Office.Core;
 using Dielmex_Order_Manager.com.models;
 using LinqToExcel;
+using System.Diagnostics;
 
 namespace Dielmex_Order_Manager
 {
@@ -33,37 +34,65 @@ namespace Dielmex_Order_Manager
         {
             var book = new ExcelQueryFactory(Globals.ThisWorkbook.FullName);
             // Orden	Clave	Precio Unitario	Cantidad	Subtotal
-
-            var auxList = (from row in book.Worksheet("DBOB")
-                           let item
-                           = new Tuple<int, string, double>(row["Orden"].Cast<int>(),
-                               row["Clave"].Cast<string>(), 
-                               row["Cantidad"].Cast<double>())
-                           select item).ToList();
-
-            var res = auxList.Select(element =>
+            try
             {
-                OrderItem temp;
-                temp = new OrderItem();
-                temp.OrderNumber = element.Item1;
-                if (element.Item2 != null)
+                var auxList = (from row in book.Worksheet("DBOB")
+                               let item
+                               = new Tuple<int, string, double>(row["Orden"].Cast<int>(),
+                                   row["Clave"].Cast<string>(),
+                                   row["Cantidad"].Cast<double>())
+                               select item).ToList();
+
+                var res = auxList.Select(element =>
                 {
-                    temp.Equipment = Hoja1._services.Where(currentService => currentService.ServiceId == element.Item2).FirstOrDefault();
-                    temp.Quantity = element.Item3;
+                    OrderItem temp;
+                    temp = new OrderItem();
+                    temp.OrderNumber = element.Item1;
+                    if (element.Item2 != null)
+                    {
+                        if (Hoja1._services.Exists(el =>
+                        {
+                            return el.ServiceId == element.Item2;
+                        }))
+                        {
+                            temp.Equipment = Hoja1._services.Where(currentService => currentService.ServiceId == element.Item2).FirstOrDefault();
+                            temp.Quantity = element.Item3;
 
-                    temp.SubTotal = temp.Quantity * temp.Equipment.Cost;
-                }
-               
-               
+                            temp.SubTotal = temp.Quantity * temp.Equipment.Cost;
+                        }
+                        else
+                        {
+                            MessageBox.Show(String.Format("No existe {0} en DBOB", element.Item2));
+                        }
+                        
+                        
+                    }
 
 
-                return temp;
-            });
 
 
-            _itemsOrder = res.ToList();
+                    return temp;
+                });
 
-            onLoaded();
+
+                _itemsOrder = res.ToList();
+
+                onLoaded();
+            }
+            catch (Exception ex)
+            {
+                
+                StackTrace st = new StackTrace(ex, true);
+        StackFrame[] frames = st.GetFrames();
+
+        // Iterate over the frames extracting the information you need
+        foreach (StackFrame frame in frames)
+        {
+          MessageBox.Show(String.Format("{0}:{1}({2},{3})", frame.GetFileName(), frame.GetMethod().Name, frame.GetFileLineNumber(), frame.GetFileColumnNumber()));
+        }
+      
+                
+            }
 
         }
 

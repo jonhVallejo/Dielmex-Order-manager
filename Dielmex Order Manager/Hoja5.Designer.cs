@@ -17,8 +17,12 @@ namespace Dielmex_Order_Manager {
     [global::System.Security.Permissions.PermissionSetAttribute(global::System.Security.Permissions.SecurityAction.Demand, Name="FullTrust")]
     public sealed partial class Hoja5 : Microsoft.Office.Tools.Excel.WorksheetBase {
         
+        internal Microsoft.Office.Tools.Excel.ListObject Tabla8;
+        
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "12.0.0.0")]
         private global::System.Object missing = global::System.Type.Missing;
+        
+        internal Microsoft.Office.Tools.Excel.Controls.Button button1;
         
         /// 
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -114,6 +118,7 @@ namespace Dielmex_Order_Manager {
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         private void BeginInitialization() {
             this.BeginInit();
+            this.Tabla8.BeginInit();
         }
         
         /// 
@@ -121,6 +126,7 @@ namespace Dielmex_Order_Manager {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "12.0.0.0")]
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         private void EndInitialization() {
+            this.Tabla8.EndInit();
             this.EndInit();
         }
         
@@ -129,6 +135,8 @@ namespace Dielmex_Order_Manager {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "12.0.0.0")]
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         private void InitializeControls() {
+            this.Tabla8 = Globals.Factory.CreateListObject(null, null, "Hoja5:Tabla8", "Tabla8", this);
+            this.button1 = new Microsoft.Office.Tools.Excel.Controls.Button(Globals.Factory, this.ItemProvider, this.HostContext, "307750AF937323346DF393BC325250B3B34B73", "307750AF937323346DF393BC325250B3B34B73", this, "button1");
         }
         
         /// 
@@ -136,6 +144,22 @@ namespace Dielmex_Order_Manager {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "12.0.0.0")]
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         private void InitializeComponents() {
+            // 
+            // Tabla8
+            // 
+            this.Tabla8.DefaultDataSourceUpdateMode = System.Windows.Forms.DataSourceUpdateMode.Never;
+            // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.SystemColors.Control;
+            this.button1.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.button1.Name = "button1";
+            this.button1.Text = "Filtrar";
+            this.button1.UseVisualStyleBackColor = false;
+            // 
+            // Hoja5
+            // 
+            this.button1.BindingContext = this.BindingContext;
         }
         
         /// 
@@ -143,6 +167,15 @@ namespace Dielmex_Order_Manager {
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
         private bool NeedsFill(string MemberName) {
             return this.DataHost.NeedsFill(this, MemberName);
+        }
+        
+        /// 
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "12.0.0.0")]
+        [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
+        protected override void OnShutdown() {
+            this.Tabla8.Dispose();
+            base.OnShutdown();
         }
     }
     

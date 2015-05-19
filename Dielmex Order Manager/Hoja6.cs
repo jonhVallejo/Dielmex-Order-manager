@@ -37,12 +37,15 @@ namespace Dielmex_Order_Manager
 
             var book = new ExcelQueryFactory(Globals.ThisWorkbook.FullName);
 
+
             List<Tuple<int, string>> listForEquipment = new List<Tuple<int,string>>();
+
 
             listForEquipment = (from row in book.Worksheet("DBOH")
                         let item = new Tuple<int, string>(row["No Orden"].Cast<int>(), row["No Equipo"].Cast<String>())
                        
                        select item).ToList();
+
 
             var res = (from row in book.Worksheet("DBOH")
                        let item = new Order
@@ -54,6 +57,8 @@ namespace Dielmex_Order_Manager
                            ReceivedBy = row["Recibio el servicio"].Cast<string>(),
                        }
                        select item).ToList();
+            
+            
             res = res.Select(c =>
                 {
                 c.Equipment = Hoja2._inventary.Where(
@@ -69,10 +74,11 @@ namespace Dielmex_Order_Manager
                 return c;
             
             }).ToList();
+            
+            
             if (res.Count == 1 && res.FirstOrDefault().Folio == 0)
             {
                 _orders = new List<Order>();
-
             }else
             {
                 _orders = res;

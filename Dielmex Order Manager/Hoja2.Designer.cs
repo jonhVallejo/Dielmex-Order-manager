@@ -19,6 +19,8 @@ namespace Dielmex_Order_Manager {
         
         internal Microsoft.Office.Tools.Excel.ListObject Tabla2;
         
+        internal Microsoft.Office.Tools.Excel.NamedRange EquiposList;
+        
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "12.0.0.0")]
         private global::System.Object missing = global::System.Type.Missing;
         
@@ -117,6 +119,7 @@ namespace Dielmex_Order_Manager {
         private void BeginInitialization() {
             this.BeginInit();
             this.Tabla2.BeginInit();
+            this.EquiposList.BeginInit();
         }
         
         /// 
@@ -124,6 +127,7 @@ namespace Dielmex_Order_Manager {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "12.0.0.0")]
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         private void EndInitialization() {
+            this.EquiposList.EndInit();
             this.Tabla2.EndInit();
             this.EndInit();
         }
@@ -134,6 +138,7 @@ namespace Dielmex_Order_Manager {
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         private void InitializeControls() {
             this.Tabla2 = Globals.Factory.CreateListObject(null, null, "Hoja2:Tabla2", "Tabla2", this);
+            this.EquiposList = Globals.Factory.CreateNamedRange(null, null, "EquiposList", "EquiposList", this);
         }
         
         /// 
@@ -145,6 +150,10 @@ namespace Dielmex_Order_Manager {
             // Tabla2
             // 
             this.Tabla2.DefaultDataSourceUpdateMode = System.Windows.Forms.DataSourceUpdateMode.Never;
+            // 
+            // EquiposList
+            // 
+            this.EquiposList.DefaultDataSourceUpdateMode = System.Windows.Forms.DataSourceUpdateMode.Never;
             // 
             // Hoja2
             // 
@@ -162,6 +171,7 @@ namespace Dielmex_Order_Manager {
         [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Tools.Office.ProgrammingModel.dll", "12.0.0.0")]
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]
         protected override void OnShutdown() {
+            this.EquiposList.Dispose();
             this.Tabla2.Dispose();
             base.OnShutdown();
         }

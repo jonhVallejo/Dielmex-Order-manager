@@ -388,10 +388,8 @@ namespace Dielmex_Order_Manager
                 endRange = tr.Split(':')[1];
                 var temp = (from row in book.WorksheetRange(startRange, endRange, "Captura")
                             let item = new Tuple<string, string>(row["Cantidad"].Cast<string>(), row["Clave"].Cast<string>())
-                          
                            select item).ToList();
                 */
-
 
                 /*
                  * Mapea la tabla del cuerpo de la order, para generar los conceptos asociados a la order. 
@@ -431,7 +429,7 @@ namespace Dielmex_Order_Manager
 
                 _tempOrder.OrderItems = res.ToList();
 
-                /*
+                /*******
                  * Se añaden los objetos que se acaban de crear a las colecciones globales.
                  */
                 Hoja7._itemsOrder.AddRange(_tempOrder.OrderItems);

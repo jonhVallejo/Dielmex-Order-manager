@@ -23,22 +23,32 @@ namespace Dielmex_Order_Manager
 
         void Hoja4_BeforeRightClick(Excel.Range Target, ref bool Cancel)
         {
-            // Concatenar todos los datos de la orden seleccionada
+
+            
+
+            /*
+             * Id Order
+             */
             double selectedOrder = (double)this.Range["A7"].Value;
 
+            /*
+             * Get the object order
+             */
             var orderReference = Hoja6._orders.Find(order =>
             {
-             
                 return order.Folio == selectedOrder;
             });
 
             
 
-            StringBuilder concatenateValues = new StringBuilder();
 
-                
+            /*
+             * Order can't be null
+             */   
             if (orderReference != null)
             {
+                StringBuilder concatenateValues = new StringBuilder();
+
                 orderReference.OrderItems.ForEach(element =>
                 {
                     concatenateValues.Append(element.Equipment.ServiceId);
@@ -48,14 +58,21 @@ namespace Dielmex_Order_Manager
                     concatenateValues.Append(element.Equipment.UnitOfMeasurement);
                     concatenateValues.Append("    ");
                     concatenateValues.Append(element.Quantity);
-                    concatenateValues.Append("    ");
-                    concatenateValues.Append(element.Equipment.Cost);
-                    concatenateValues.Append("    ");
-                    concatenateValues.Append(element.Quantity * element.Equipment.Cost);
+                    //concatenateValues.Append("    ");
+                   // concatenateValues.Append(element.Equipment.Cost);
+                    //concatenateValues.Append("    ");
+                   // concatenateValues.Append(element.Quantity * element.Equipment.Cost);
                     concatenateValues.Append("\n");
                 });
+                /*
+                 * Wrap the content. Order to Excel accept the \n character.
+                 */
+
+                //this.Cells.Range["A23"].WrapText = true;
+                //this.Cells.Range["A23"].Value = concatenateValues.ToString();
                 Target.WrapText = true;
                 Target.Value = concatenateValues.ToString();
+                
             }
             
             

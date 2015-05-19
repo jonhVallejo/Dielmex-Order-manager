@@ -46,21 +46,30 @@ namespace Dielmex_Order_Manager
              */
             _dynamicColumNames = columNames.Except(_DEFAULT_COLUMN_NAMES).ToList();
 
-            
 
-            /*
-             * LINQ to sheet for retreive all values in a table
-             */
-            var res = (from row in book.Worksheet(this.Name)
-                       let item = new Service
-                       {
-                           ServiceId = row["REF"].Cast<string>(),
-                           UnitOfMeasurement = row["UNIDAD DE MEDIDA"].Cast<string>(),
-                           Description = row["DESCRIPCION"].Cast<string>(),
-                           Cost = row["TOTAL"].Cast<double>()
-                       }
-                       select item).ToList();
-            _services = res;
+            try
+            {
+                /*
+                 * LINQ to sheet for retreive all values in a table
+                 */
+                var res = (from row in book.Worksheet(this.Name)
+                           let item = new Service
+                           {
+                               ServiceId = row["REF"].Cast<string>(),
+                               UnitOfMeasurement = row["UNIDAD DE MEDIDA"].Cast<string>(),
+                               Description = row["DESCRIPCION"].Cast<string>(),
+                               Cost = row["TOTAL"].Cast<double>()
+                           }
+                           select item).ToList();
+                _services = res;
+
+
+            }
+            catch (Exception er)
+            {
+                MessageBox.Show("A Exception as been succeded while load the Inventary sheet.");
+                MessageBox.Show("Message: " + er.Message);
+            }
 
             /*
              * Callback for syncronize the load of data.
